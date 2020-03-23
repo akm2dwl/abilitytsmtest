@@ -1,0 +1,53 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:po="http://primefaces.org/omega">
+    <style type="text/css">
+        .xyz:focus {
+            background-color: white !important;
+        }
+    </style>
+    <div class="sidebar">
+        <div class="nano">
+            <div class="nano-content sidebar-scroll-content">
+                <div class="logo">
+                    <p:graphicImage name="#" library="omega-layout" width="113"/>
+                </div>
+
+                <div class="profile">
+                    <p:graphicImage name="images/Winning-Logo-Design-Tips.png" library="omega-layout" />
+                    <a id="profile-button" href="#">
+                        <span class="username" style="color:gold">Task Management</span>
+                        <i class="fa fa-fw fa-cog"></i>
+                    </a>
+                    <ul>
+                        <li><a href="#"><i class="fa fa-fw fa-sliders"></i><span>Account</span></a></li>
+                        <li><a href="#"><i class="fa fa-fw fa-bell"></i><span>Notifications</span><span class="menu-badge">2</span></a></li>
+                        <li><a href="#">
+                                <h:panelGrid columns="2"  cellspacing="0" cellpadding="0">
+                                    <i class="fa fa-fw fa-sign-out"></i><span><p:commandLink id="btnCancel" value="Logout" action="#{autoComplete.logout()}" style="color: #FFFFFF;" /></span>
+                                </h:panelGrid>
+                            </a> 
+                        </li>
+                    </ul>
+                </div >
+                
+
+                <div class="menu">
+
+                    <h:form>
+                        <po:menu model="#{mctlDao.model}" />
+                    </h:form>
+
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</ui:composition>

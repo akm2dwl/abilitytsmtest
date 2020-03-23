@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+
+    <ui:define name="title">User</ui:define>
+    
+    
+    <ui:define name="content"> 
+        
+        <h:form id="crd1">
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card">
+
+                            <p:growl id="growl" showDetail="true" sticky="true" /> 
+
+                            <h1>User</h1>
+                            <h:panelGrid cellpadding="10" width="100%">
+                                <p:panelGrid id="pn" columns="2" columnClasses="ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+
+                                    <p:outputLabel value="UserCode"/>                         
+                                    <p:inputText value="#{usrDao.usr.uid}" id="ucode" style="max-width: 100px;" readonly="true"/>
+
+                                    <p:outputLabel value="User Name"/>                         
+                                    <p:inputText value="#{usrDao.usr.unme}"/>
+
+                                    <p:outputLabel value="Company Name"/>                         
+                                    <p:inputText value="#{usrDao.usr.cmpy}"/>
+
+                                    <p:outputLabel value="Company Department"/>                         
+                                    <p:inputText value="#{usrDao.usr.cmpdept}"/>
+
+                                    <p:outputLabel value="Rank"/>                         
+                                    <p:inputText value="#{usrDao.usr.rk}"/>
+
+                                    <p:outputLabel value="Mobile Phone No"/>                         
+                                    <p:inputText value="#{usrDao.usr.mphno}"/>  
+
+                                    <p:outputLabel value="Email"/>                         
+                                    <p:inputText value="#{usrDao.usr.email}"/>
+
+                                    <p:outputLabel value="Password"/>     
+                                    <p:password id="pswd" value="#{usrDao.usr.pswd}" feedback="false"/>
+
+                                    <p:outputLabel value="Confirm Password"/>
+                                    <p:password value="#{usrDao.cpwd}" feedback="false">
+                                        <p:ajax event="change" listener="#{usrDao.cpasswordLostFocus()}" process="@form" update="growl" />
+                                    </p:password>
+                                </p:panelGrid>  
+
+                                <p:panelGrid columns="4" columnClasses="ui-grid-col-1.5,ui-grid-col-1.5" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    <p:commandButton id="new" value="New" action="#{usrDao.newUsrcode()}" process="@form" update="pn" icon="fa fa-plus Fs14 White"  style="max-width:80px;"/>
+                                    <p:commandButton id="Add" disabled="#{usrDao.selectBtn}" value="Add" action="#{usrDao.insert()}"  process="@form" update="@form growl" icon="fa fa-save Fs14 White" style="max-width:100px;" />
+                                    <p:commandButton id="Update" value="Update" action="#{usrDao.update()}" process="@form" update="@form growl" icon="fa fa-edit Fs14 White" style="max-width:85px;" />
+                                    <p:button value="Exit" outcome="dashboard" icon="fa fa-close Fs14 White"  style="max-width:80px;"/>
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    <p:dataTable id="usr"  var="usrList" value="#{usrDao.usrList}" reflow="true" selection="#" rowKey="#" paginator="true" rows="10">
+                                        <p:column headerText="User Code" >
+                                            <h:outputText value="#{usrList.uid}" />
+                                        </p:column>
+
+                                        <p:column headerText="User Name" >
+                                            <h:outputText value="#{usrList.unme}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Company Name" >
+                                            <h:outputText value="#{usrList.cmpy}" />
+                                        </p:column>
+
+                                        <p:column headerText="Company Department" >
+                                            <h:outputText value="#{usrList.cmpdept}" />
+                                        </p:column>
+
+                                        <p:column headerText="Rank" >
+                                            <h:outputText value="#{usrList.rk}" />
+                                        </p:column>
+
+                                        <p:column headerText="Mobile Phone No." >
+                                            <h:outputText value="#{usrList.mphno}" />
+                                        </p:column>
+
+                                        <p:column headerText="Email" >
+                                            <h:outputText value="#{usrList.email}" />
+                                        </p:column>
+
+                                        <p:column>                                                       
+
+                                            <p:commandButton id="select" icon="fa fa-edit Fs14 White" style="max-width:20px;height: 20px;" action="#{usrDao.select()}" process="@this" update="@form">
+                                                <f:setPropertyActionListener value="#{usrList}" target="#{usrDao.selectedUr}"/>
+                                            </p:commandButton>
+
+                                            <p:commandButton id="Delete" icon="fa fa-trash Fs14 White" style="max-width:20px;height: 20px;"  action="#{usrDao.delete()}" process="@this" update="@form">
+                                                <f:setPropertyActionListener value="#{usrList}" target="#{usrDao.selectedUr}" />
+                                            </p:commandButton>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </p:panelGrid>
+
+                            </h:panelGrid>                                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

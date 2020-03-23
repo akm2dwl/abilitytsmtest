@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Job Type</ui:define>
+
+    <ui:define name="content">
+        <h:form id="crd1">
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card">
+                            
+                            <p:growl id="growl" showDetail="true" sticky="true" /> 
+                            
+                            <h1>Job Type</h1>
+                            <h:panelGrid cellpadding="10" width="100%">
+                                <p:panelGrid id="pn" columns="2" columnClasses="ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                               
+                                        <p:outputLabel value="Company Name"/>                         
+                                        <p:inputText value="#{jtypeDao.jtype.cmpy}"/>
+
+                                         <p:outputLabel value="Company Department"/>                         
+                                         <p:inputText value="#{jtypeDao.jtype.cmpdept}"/>
+
+                                         <p:outputLabel value="Job Type Code"/>                         
+                                         <p:inputText value="#{jtypeDao.jtypecd}" id="jtcode" style="max-width: 80px;" readonly="true"/>
+
+                                         <p:outputLabel value="Job Type Name"/>                         
+                                         <p:inputText value="#{jtypeDao.jtype.jtypenme}"/>                      
+                                         
+                                 </p:panelGrid>  
+                                
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-1.5,ui-grid-col-1.5,ui-grid-col-1.5" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    <p:commandButton id="New" value="New" action="#{jtypeDao.newJtcode()}" process="@this" update="pn" icon="fa fa-plus Fs14 White" style="max-width:100px;" />
+                                    <p:commandButton id="Save" value="Submit" action="#{jtypeDao.insert()}" process="@form" update="@form growl" icon="fa fa-save Fs14 White" style="max-width:100px;" />
+                                    <p:button value="Exit" outcome="dashboard" icon="fa fa-close Fs14 White"  style="max-width:80px;"/>
+                                </p:panelGrid>
+                                
+                                
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    <p:dataTable id="jtype" var="jtypeList" value="#{jtypeDao.jtypeList}" reflow="true" selection="#" rowKey="#" paginator="true" rows="12">
+                                                <p:column headerText="SNo" >
+                                                    <h:outputText value="#{jtypeList.sno}" />
+                                                </p:column>
+
+                                                <p:column headerText="Company Name" >
+                                                    <h:outputText value="#{jtypeList.cmpy}" />
+                                                </p:column>
+
+                                                <p:column headerText="Company Department" >
+                                                    <h:outputText value="#{jtypeList.cmpdept}" />
+                                                </p:column>
+
+                                                <p:column headerText="Job Type Code" >
+                                                    <h:outputText value="#{jtypeList.jtypecd}" />
+                                                </p:column>
+
+                                                <p:column headerText="Job Type Name" >
+                                                    <h:outputText value="#{jtypeList.jtypenme}" />
+                                                </p:column>
+
+                                                
+                                            <p:column>                                                       
+                                                        
+                                                <p:commandButton id="select" icon="fa fa-edit Fs14 White" style="max-width:20px;height: 20px;" action="#{jtypeDao.select()}" process="@this" update="@form">
+                                                   <f:setPropertyActionListener value="#{jtypeList}" target="#{jtypeDao.selectedJt}" />
+                                                </p:commandButton>
+
+                                                <p:commandButton id="Delete" icon="fa fa-trash Fs14 White" style="max-width:20px;height: 20px;"  action="#{jtypeDao.delete()}" process="@this" update="@form">
+                                                    <f:setPropertyActionListener value="#{jtypeList}" target="#{jtypeDao.selectedJt}" />
+                                                </p:commandButton>
+                                            </p:column>
+
+                                            </p:dataTable>
+                                        </p:panelGrid>
+                                    
+                              </h:panelGrid>                                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

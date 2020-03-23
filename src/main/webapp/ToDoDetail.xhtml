@@ -1,0 +1,150 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">To Do Detail</ui:define>
+
+    <ui:define name="content">
+        <h:form id="crd1">
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card">
+
+                            <p:growl id="growl" />                             
+                            <h1>To Do Detail Entry</h1>
+                            <h:panelGrid cellpadding="10" width="100%">                                
+                                <p:panelGrid id="pn" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    <p:outputLabel value="MainTask"  />                         
+                                    <p:autoComplete id="mt" value="#{tododDao.comboth}" completeMethod="#{autoComplete.filterTodohCombo}"
+                                                    var="todoh" itemLabel="#{todoh.desp}" itemValue="#{todoh}" converter="tohConverter" 
+                                                    forceSelection="true" dropdown="true" style="width:200px;">
+                                        <p:column>
+                                            <h:outputText value="#{todoh.desp}  "/>
+                                        </p:column>
+                                        <p:ajax event="itemSelect" listener="#{tododDao.mainLostFocus()}" update="dt dep app New tod "/>
+                                    </p:autoComplete>
+                                    <p:outputLabel value="Detail Task ID"/>                         
+                                    <p:inputText id="dt" value="#{tododDao.todod.dtid}" style="max-width: 50px;" readonly="true"/>
+                                    
+                                    <p:outputLabel  value="Customer"/>                         
+                                    <p:inputText id="dep" value="#{tododDao.todod.deptnme}" readonly="true"/>
+
+                                    <p:outputLabel value="Application"/>                         
+                                    <p:inputText  id="app" value="#{tododDao.todod.applton}" readonly="true"/>
+
+                                    <p:outputLabel value="Detail Task Description"/>                         
+                                    <p:inputText value="#{tododDao.todod.desp}" />                                    
+
+
+                                    <p:outputLabel value="Preceding Task ID"/>                         
+                                    <p:inputText value="#{tododDao.todod.ptid}"/>
+
+                                    <p:outputLabel value="JobType"/>
+                                    <p:autoComplete id="jt" value="#{tododDao.comboJtype}" completeMethod="#{autoComplete.filterJtypeCombo}"
+                                                    var="jtype" itemLabel="#{jtype.jtypenme}" itemValue="#{jtype}" converter="jtConverter" 
+                                                    forceSelection="true" dropdown="true">
+
+                                        <p:column>
+                                            <h:outputText value="#{jtype.jtypenme}" />
+                                        </p:column>     
+                                        <p:ajax event="itemSelect" listener="#{tododDao.selectJtpye}" update="jt"/>
+                                    </p:autoComplete>                                   
+
+
+                                    <p:outputLabel value="Assign Date"/>                         
+                                    <p:calendar  value="#{tododDao.todod.adate}" showOn="button" locale="de" navigator="true" />
+
+                                    <p:outputLabel value="Start Date"/>                         
+                                    <p:calendar  value="#{tododDao.todod.sdate}" showOn="button" locale="de" navigator="true" />
+
+                                    <p:outputLabel value="To Finish Date"/>                         
+                                    <p:calendar  value="#{tododDao.todod.tfdate}" showOn="button" locale="de" navigator="true" />
+
+                                    <p:outputLabel value="Estimated Minute"/>                         
+                                    <p:inputText value="#{tododDao.todod.eminute}"/>
+
+                                    <p:outputLabel value="Assign To"/>                         
+                                    <p:autoComplete id="auser" value="#{tododDao.comboAUsr}" completeMethod="#{autoComplete.filterUserCombo}"
+                                                    var="usr" itemLabel="#{usr.unme}" itemValue="#{usr}" converter="usrConverter" 
+                                                    forceSelection="true" dropdown="true"  >
+
+                                        <p:column>
+                                            <h:outputText value="#{usr.unme}" />
+                                        </p:column>
+                                        <p:ajax event="itemSelect" listener="#{tododDao.selectAUsr}" update="auser"/>
+                                    </p:autoComplete> 
+
+                                    <p:outputLabel value="Account Head"/>                         
+                                    <p:inputText value="#{tododDao.todod.achead}"/>
+
+                                    <p:outputLabel value="Budget Amount Original"/>                         
+                                    <p:inputText value="#{tododDao.todod.budamto}"/>
+
+                                    <p:outputLabel value="Budget Amount Current"/>                         
+                                    <p:inputText value="#{tododDao.todod.budamtc}"/>
+
+                                    <p:outputLabel value="Remark"/>                         
+                                    <p:inputTextarea value="#{tododDao.todod.remark}"/>
+
+                                </p:panelGrid>                      
+
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-1.5,ui-grid-col-1.5,ui-grid-col-1.5" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    <p:commandButton id="New" value="New" action="#{tododDao.newDTID()}" disabled="#{tododDao.selectNew}" process="@form" update="pn" icon="fa fa-plus Fs14 White" style="max-width:100px;" />
+                                    <p:commandButton id="Submit" value="Add" action="#{tododDao.submit_click()}" process="@form" update="@form growl" icon="fa fa-save Fs14 White" style="max-width:100px;" />
+                                    <p:button value="Exit" outcome="dashboard" icon="fa fa-close Fs14 White"  style="max-width:100px;"/>
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">                                    
+                                    <p:dataTable id="tod" var="todod" widgetVar="todod" value="#{tododDao.tododList}" reflow="true" selection="#" rowKey="#" paginator="true" rows="12"> 
+
+                                        <p:column headerText="Sno"  style="width:15px;">
+                                            <h:outputText value="#{todod.sno}" />
+                                        </p:column>
+                                      
+                                        <p:column headerText="Description" style="width:200px;">
+                                            <h:outputText value="#{todod.desp}" />
+                                        </p:column>
+
+                                        <p:column headerText="Assign Date">
+                                            <h:outputText value="#{todod.adate}" />
+                                        </p:column>
+
+                                        <p:column headerText="Start Date">
+                                            <h:outputText value="#{todod.sdate}" />
+                                        </p:column>
+                                        <p:column headerText="Finish Date">
+                                            <h:outputText value="#{todod.tfdate}" />
+                                        </p:column>
+
+                                        <p:column headerText="Assign User">
+                                            <h:outputText value="#{todod.uname}" />
+                                        </p:column>
+
+                                        <p:column>                                                       
+
+                                            <p:commandButton id="select" icon="fa fa-edit Fs14 White" style="max-width:20px;height: 15px;" action="#{tododDao.select()}" process="@this" update="@form">
+                                                <f:setPropertyActionListener value="#{todod}" target="#{tododDao.selectTodod}"  />
+                                            </p:commandButton>
+
+                                            <p:commandButton id="Delete" icon="fa fa-trash Fs14 White" style="max-width:20px;height: 15px;"  action="#{tododDao.delete()}" process="@this" update="@form">
+                                                <f:setPropertyActionListener value="#{todod}" target="#{tododDao.selectTodod}" />
+                                            </p:commandButton>
+                                        </p:column>
+
+
+                                    </p:dataTable>
+                                </p:panelGrid>
+
+                            </h:panelGrid>                                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

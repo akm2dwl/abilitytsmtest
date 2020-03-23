@@ -1,0 +1,198 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Work Done</ui:define>
+
+    <ui:define name="content">
+        <h:form id="crd1" >
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card">
+
+                            <p:growl id="growl" showDetail="true" sticky="true" /> 
+
+                            <h1>Work Done</h1>
+                            <h:panelGrid cellpadding="10" width="100%"> 
+
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">   
+
+                                    <p:inputText placeholder="User Code"  value="#{wdoneDao.txtucode}" readonly="true" style="width:80px" />
+                                    <p:inputText placeholder="User Name" value="#{wdoneDao.txtunme}" readonly="true" style="width:150px"/>                                    
+                                    <p:calendar placeholder="Date" disabled="#{wdoneDao.calendarBoolean}" showOn="button" value="#{wdoneDao.txtptoday}" readonlyInput="true" navigator="true" pattern="dd/MM/yyyy"/>                                                                    
+                                </p:panelGrid> 
+
+                                <p:panelGrid id="testg" columns="1" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">                                                                                                           
+                                    <b><u>To Do List</u></b>
+                                    <p:dataTable id="todd" var="todod" value="#{wdoneDao.listTodod}" reflow="true" selection="#" rowKey="#" paginator="true" rows="12">
+                                        <p:column headerText="MainTask" >
+                                            <h:outputText value="#{todod.thnme}" />
+                                        </p:column>
+
+                                        <p:column headerText="DetailTask" >
+                                            <h:outputText value="#{todod.dtid}" />
+                                        </p:column>
+
+                                        <p:column headerText="Description" >
+                                            <h:outputText value="#{todod.desp}" />
+                                        </p:column>
+
+                                        <p:column headerText="Assign Date" >
+                                            <h:outputText value="#{todod.adate}" />
+                                        </p:column>
+
+                                        <p:column headerText="Start Date" >
+                                            <h:outputText value="#{todod.sdate}" />
+                                        </p:column>
+
+                                        <p:column headerText="To Finish Date" >
+                                            <h:outputText value="#{todod.tfdate}" />
+                                        </p:column>
+
+                                        <p:column headerText="Status" >
+                                            <h:outputText value="#{todod.status}" />
+                                        </p:column>
+                                        <p:column>
+                                            <p:commandButton id="select" icon="fa fa-edit Fs14 White" style="max-width:20px;max-height: 20px;" action="#{wdoneDao.selectD()}" process="@this" update="@form">
+                                                <f:setPropertyActionListener value="#{todod}" target="#{wdoneDao.selectedTodoD}" />
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:panelGrid>
+                                <p:panelGrid id="pn" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    <p:inputText style="width:50px;" value="#{wdoneDao.wdone.mtid}" type="hidden"/>
+                                    <p:inputText style="width:50px;" value="#{wdoneDao.wdone.dtid}" type="hidden"/>
+                                    <p:inputText style="width:50px;" value="#{wdoneDao.wdone.deptid}" type="hidden"/>
+                                    <p:inputText style="width:50px;" value="#{wdoneDao.wdone.appid}" type="hidden"/>
+                                    <p:outputLabel value="Sno"/>                         
+                                    <p:inputText style="width:50px;" value="#{wdoneDao.wdone.sno}" readonly="true"/>                                    
+                                    <p:outputLabel value="MainTask"  />                         
+                                    <p:inputText style="width:200px;" value="#{wdoneDao.wdone.mainTaskName}" readonly="true"/>
+
+                                    <p:outputLabel value="DetailTask"/>                         
+                                    <p:inputText style="width:200px;" value="#{wdoneDao.wdone.detailName}" readonly="true"/>
+
+                                    <p:outputLabel value="Department"/>                         
+                                    <p:inputText style="width:200px;" value="#{wdoneDao.wdone.deptnme}" readonly="true"/>
+
+                                    <p:outputLabel value="Application"/>      
+                                    <p:inputText style="width:200px;" value="#{wdoneDao.wdone.applton}" readonly="true"/> 
+
+                                    <p:outputLabel value="Description"/>                         
+                                    <p:inputText style="width:200px;" value="#{wdoneDao.wdone.desp}"/> 
+
+                                    <p:outputLabel value="From Time"/>
+                                    <pe:timePicker value="#{wdoneDao.wdone.ftime}" mode="popup" showCloseButton="true" startHours="9" endHours="20"
+                                                   showDeselectButton="true" showNowButton="true" showPeriod="true" style="width:70px;"  
+                                                   widgetVar="customTimeWidget" label="Custom time picker" />
+                                    <p:outputLabel value="To Time"/>
+                                    <pe:timePicker value="#{wdoneDao.wdone.ttime}" mode="popup" showCloseButton="true" startHours="9" endHours="20"
+                                                   showDeselectButton="true" showNowButton="true" showPeriod="true" style="width:70px;"  
+                                                   widgetVar="aTimeWidget" label="Custom time picker" > 
+
+                                    </pe:timePicker>
+
+
+                                    <p:outputLabel value="Total Minutes"/>                         
+                                    <p:inputText style="width:70px;" value="#{wdoneDao.wdone.minutes}">
+                                        <p:ajax event="focus" listener="#{wdoneDao.timeLotFocus}" process="pn" update="pn"/>
+                                    </p:inputText>
+
+                                    <p:outputLabel value="Job Type"/>                         
+                                    <p:autoComplete id="jt" value="#{wdoneDao.comboJtype}" completeMethod="#{autoComplete.filterJtypeCombo}"
+                                                    var="jtype" itemLabel="#{jtype.jtypenme}" itemValue="#{jtype}" converter="jtConverter" 
+                                                    forceSelection="true" dropdown="true" style="width:150px;">
+
+                                        <p:column>
+                                            <h:outputText value="#{jtype.jtypenme}" />
+                                        </p:column>     
+                                        <p:ajax event="itemSelect" listener="#{wdoneDao.selectJtype}" update="jt"/>
+                                    </p:autoComplete>
+
+                                    <p:outputLabel value="Plan/Urgent"/>
+                                    <p:selectOneMenu id="plu" value="#{wdoneDao.wdone.plur}" effect="fold" editable="true" style="width:80px;">
+                                        <f:selectItem itemLabel="P" itemValue="P" />
+                                        <f:selectItem itemLabel="U" itemValue="U" />
+                                    </p:selectOneMenu> 
+
+                                    <p:outputLabel value="Status"/>
+                                    <p:selectOneMenu id="sta" value="#{wdoneDao.wdone.status}" effect="fold" editable="true" style="width:150px;">
+                                        <f:selectItem itemLabel="Processing" itemValue="Processing" />
+                                        <f:selectItem itemLabel="Finish" itemValue="Finish" />
+                                        <f:selectItem itemLabel="Cancel" itemValue="Cancel" />
+                                        <f:selectItem itemLabel="Pending" itemValue="Pending" />
+                                    </p:selectOneMenu>                                            
+
+                                    <p:outputLabel value="Remark"/>
+                                    <p:inputTextarea style="width:200px;" value="#{wdoneDao.wdone.remark}"/> 
+
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-1.5,ui-grid-col-1.5,ui-grid-col-1.5" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    <p:commandButton id="New" value="New" action="#{wdoneDao.newSno()}" process="@form" update="pn" icon="fa fa-plus Fs14 White" style="max-width:80px;" />
+                                    <p:commandButton id="Submit" value="Submit" action="#{wdoneDao.insert()}" process="@form" update="testg pn wd" icon="fa fa-save Fs14 White" style="max-width:100px;" />
+                                    <p:button value="Exit" outcome="dashboard" icon="fa fa-close Fs14 White"  style="max-width:100px;"/>
+                                </p:panelGrid>
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">                                    
+                                    <p:dataTable id="wd" var="wd" widgetVar="wd" value="#{wdoneDao.listWdone}" reflow="true" selection="#" rowKey="#" paginator="true" rows="12"> 
+
+                                        <p:column headerText="Sno"  style="width:15px;">
+                                            <h:outputText value="#{wd.sno}" />
+                                        </p:column>
+
+                                        <p:column headerText="Department" >
+                                            <h:outputText value="#{wd.deptnme}" style="width:50px;"/>
+                                        </p:column>
+
+                                        <p:column headerText="Application" >
+                                            <h:outputText value="#{wd.applton}" style="width:250px;"/>
+                                        </p:column>
+
+                                        <p:column headerText="Description" style="width:250px;">
+                                            <h:outputText value="#{wd.desp}" />
+                                        </p:column>
+
+                                        <p:column headerText="From Time" style="width:50px;" >
+                                            <h:outputText value="#{wd.ftime}" />
+                                        </p:column>
+
+                                        <p:column headerText="To Time" style="width:50px;" >
+                                            <h:outputText value="#{wd.ttime}" />
+                                        </p:column>
+
+                                        <p:column headerText="Minutes" style="width:50px;">
+                                            <h:outputText value="#{wd.minutes}" />
+                                        </p:column>
+
+                                        <p:column style="width:50px;">
+                                            <p:commandButton id="select" icon="fa fa-edit Fs14 White" style="max-width:20px;max-height: 20px;" action="#{wdoneDao.select()}" process="@this" update="@form">
+                                                <f:setPropertyActionListener value="#{wd}" target="#{wdoneDao.selectWdone}" />
+                                            </p:commandButton>
+                                            <p:commandButton id="delete"  icon="fa fa-trash Fs14 White" style="max-width:20px;max-height: 20px;" action="#{wdoneDao.delete()}" process="@this" update="@form" immediate="true">
+                                                <f:setPropertyActionListener value="#{wd}" target="#{wdoneDao.selectWdone}" />
+                                                <p:confirm header="Work Done" message="Are you sure !" icon="ui-icon-alert" />  
+                                                <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                                                    <p:commandButton value="Yes" type="button"
+                                                                     styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                    <p:commandButton value="No" type="button"
+                                                                     styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                </p:confirmDialog>
+                                            </p:commandButton>
+                                        </p:column>                                        
+
+                                    </p:dataTable>
+                                </p:panelGrid>
+                            </h:panelGrid>                                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,162 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Report Grid</ui:define>
+
+    <ui:define name="content">
+        <h:form id="crd1">
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card">
+
+                            <p:growl id="growl" showDetail="true" sticky="true" />                             
+                            <h1>To Do Report</h1>
+                            <h:panelGrid cellpadding="10" width="100%"> 
+
+                                <p:panelGrid columns="6" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    <p:outputLabel value="Assigned Leader"/>
+                                    <p:autoComplete id="ld" value="#{reportCon.comboUsr}" completeMethod="#{autoComplete.filterUserCombo}"
+                                                    var="usr" itemLabel="#{usr.unme}" itemValue="#{usr}" converter="usrConverter" 
+                                                    forceSelection="true" dropdown="true">
+                                        <p:column>
+                                            <h:outputText value="#{usr.unme}" />
+                                        </p:column>
+                                        <p:ajax event="itemSelect" process="@this"  listener="#{reportCon.selectUsr}" />
+                                    </p:autoComplete>
+                                    <p:outputLabel for="console" value="Finish Or Not:" />
+                                    <p:selectOneRadio id="console" value="#{reportCon.finished}">
+                                        <f:selectItem itemLabel="All" itemValue="1"  />                                  
+                                        <f:selectItem itemLabel="Finish" itemValue="2" />
+                                        <f:selectItem itemLabel="Not Finish" itemValue="3" />
+                                        
+                                    </p:selectOneRadio>
+                                    <p:commandButton id="search" value="Search" action="#{reportCon.search()}" process="@form" update="@form growl" icon="fa fa-save Fs14 White" style="max-width:100px;" />    
+                                </p:panelGrid>
+
+
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    <p:dataTable  id="toh" var="toh" value="#{reportCon.toDohList}" reflow="true" selection="#" rowKey="#" paginator="true" rows="10">
+                                        <f:facet name="header">
+                                            Header
+                                        </f:facet>
+
+                                        <p:column headerText="MainTask ID" style="width:50px;">
+                                            <h:outputText value="#{toh.mtid}" />
+
+
+                                        </p:column>
+                                        <p:column headerText="Application" style="width:100px;" >
+                                            <h:outputText value="#{toh.applton}" />
+
+
+                                        </p:column>
+
+                                        <p:column headerText="Description" style="width:300px;" >
+                                            <h:outputText value="#{toh.desp}" />
+
+
+                                        </p:column>
+
+                                        <p:column headerText="ActualFinish Date" style="width:100px;" >
+                                            <h:outputText value="#{toh.afdate}" />
+
+
+                                        </p:column>
+
+                                        <p:column headerText="ToFinish Date" style="width:100px;" >
+                                            <h:outputText value="#{toh.tfdate}" />                                                                                     
+                                        </p:column>
+                                        <p:column headerText="" style="width:30px;">
+                                            <p:commandButton id="select" icon="fa fa-edit Fs14 White" style="max-width:20px;height: 20px;" action="#{reportCon.selectDetail()}" process="@this" update="@form">
+                                                <f:setPropertyActionListener value="#{toh.mtid}" target="#{reportCon.mtid}" />
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:panelGrid>
+                                <p:panelGrid id="pn" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+
+                                    <p:outputLabel value="MainTask ID"/>                         
+                                    <p:outputLabel style="max-width: 120px;" value="#{reportCon.mainTaskId}"/>
+                                    <p:outputLabel value="Description"/>                         
+                                    <p:outputLabel style="max-width: 120px;" value="#{reportCon.mainDesp}"/>
+
+                                </p:panelGrid> 
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    <p:dataTable  id="tod" var="tod" value="#{reportCon.tododList}" reflow="true" selection="#" rowKey="#" paginator="true" rows="10">
+                                        <f:facet name="header">
+                                            Detail
+                                        </f:facet>
+                                        <p:column headerText="Description" style="width:300px;">
+                                            <h:outputText value="#{tod.desp}" />                                                                                        
+                                        </p:column>
+                                        <p:column headerText="ToFinish Date" style="width:100px;">
+                                            <h:outputText value="#{tod.tfdate}" /> 
+                                        </p:column>
+                                        <p:column headerText="ActualFinish Date" style="width:100px;">
+                                            <h:outputText value="#{tod.afdate}" />                                                                                     
+                                        </p:column>
+                                        <p:column headerText="Status" style="width:65px;">
+                                            <h:outputText value="#{tod.status}" />                                                                                     
+                                        </p:column>
+                                        <p:column headerText="Minutes" style="width:40px;" >
+                                            <h:outputText value="#{tod.eminute}" />                                                                                     
+                                        </p:column>
+                                        <p:column headerText="" style="width:30px;">
+                                            <p:commandButton id="select" icon="fa fa-edit Fs14 White" style="max-width:20px;height: 20px;" action="#{reportCon.selectWorkDetail()}" process="@this" update="@form">
+                                                <f:setPropertyActionListener value="#{tod}" target="#{reportCon.selectTodod}" />
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:panelGrid>
+                                <p:panelGrid id="dn" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+
+                                    <p:outputLabel value="Detail ID"/>                         
+                                    <p:outputLabel style="max-width: 120px;" value="#{reportCon.detailTaskId}"/>
+                                    <p:outputLabel value="Description"/>                         
+                                    <p:outputLabel style="max-width: 120px;" value="#{reportCon.detailDesp}"/>
+
+                                </p:panelGrid> 
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    <p:dataTable  id="wd" var="wd" value="#{reportCon.wdoneList}" reflow="true" selection="#" rowKey="#" paginator="true" rows="10">
+                                        <f:facet name="header">
+                                            Work Done
+                                        </f:facet>
+                                        <p:column headerText="WorkDone Date" style="width:100px;" >
+                                            <h:outputText value="#{wd.wdate}" />                                                                                        
+                                        </p:column>
+                                        <p:column headerText="From Time" style="width:100px;" >
+                                            <h:outputText value="#{wd.ftime}" />                                                                                        
+                                        </p:column>
+                                        <p:column headerText="TO Time" style="width:100px;" >
+                                            <h:outputText value="#{wd.ttime}" />                                                                                        
+                                        </p:column>
+                                        <p:column headerText="Minute" style="width:40px;">
+                                            <h:outputText value="#{wd.minutes}" /> 
+                                        </p:column>
+                                        <p:column headerText="User Name" >
+                                            <h:outputText value="#{wd.uName}" />                                                                                     
+                                        </p:column>
+                                        <p:column headerText="Remark" >
+                                            <h:outputText value="" />                                                                                     
+                                        </p:column> 
+
+
+                                        <f:facet name="footer">
+                                            Total: #{reportCon.wdoneList.stream().map(wd->wd.minutes).sum()}
+                                        </f:facet>
+                                    </p:dataTable>
+                                </p:panelGrid>
+                            </h:panelGrid>                                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

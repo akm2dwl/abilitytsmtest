@@ -1,0 +1,100 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Application</ui:define>
+
+    <ui:define name="content">
+        <h:form id="crd1">
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card">
+
+                            <p:growl id="growl" showDetail="true" sticky="true" /> 
+
+                            <h1>Work done Report</h1>
+                            <h:panelGrid cellpadding="10" width="100%">
+                                <p:panelGrid id="pn" columns="2" columnClasses="ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+
+                                    <p:outputLabel value="UserID"/>                         
+                                    <p:autoComplete id="ld" value="#{wdoneCon.comboUsr}" completeMethod="#{autoComplete.filterUserCombo}"
+                                                    var="usr" itemLabel="#{usr.unme}" itemValue="#{usr}" converter="usrConverter" 
+                                                    forceSelection="true" dropdown="true">
+                                        <p:column>
+                                            <h:outputText value="#{usr.unme}" />
+                                        </p:column>
+                                        <p:ajax event="itemSelect" process="@this"  listener="#{wdoneCon.selectUsr}" />
+                                    </p:autoComplete>
+
+                                    <p:outputLabel value="From Date"/>                         
+                                    <p:calendar id="fDate" value="#{wdoneCon.wdone.wdate}" pattern="dd/MM/yyyy" />
+                                    <p:outputLabel value="To Date"/> 
+                                    <p:calendar id="tDate" value="#{wdoneCon.wdone.ttime}" pattern="dd/MM/yyyy" />  
+                                    <p:outputLabel for="console" value="Order By:" />
+                                    <p:selectOneRadio id="console" value="#{wdoneCon.finished}">
+                                        <f:selectItem itemLabel="Date" itemValue="1"  />                                  
+                                        <f:selectItem itemLabel="Task" itemValue="2" />
+                                    </p:selectOneRadio>              
+
+                                </p:panelGrid>  
+
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-1.5,ui-grid-col-1.5,ui-grid-col-1.5" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+
+                                    <p:commandButton id="Search" value="Search" action="#{wdoneCon.getWdoneGrid()}" process="@form" update="@form growl" icon="fa fa-save Fs14 White" style="max-width:100px;" />
+
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    <p:dataTable  id="wd" var="wd" value="#{wdoneCon.wdoneList}" reflow="true" selection="#" rowKey="#" paginator="true" rows="10">
+                                        
+                                        <p:column headerText="Date" style="width:65px;">
+                                            <h:outputText value="#{wd.wdate}" />                                                                                        
+                                        </p:column>
+                                        <p:column headerText="Department" style="width:80px;">
+                                            <h:outputText value="#{wd.deptnme}" />                                                                                         
+                                        </p:column>
+                                        <p:column headerText="Application" style="width:100px;" >
+                                            <h:outputText value="#{wd.applton}" /> 
+                                        </p:column>
+                                        <p:column headerText="Description" style="width:250px;" >
+                                            <h:outputText value="#{wd.desp}" />                                                                                     
+                                        </p:column>
+                                         <p:column headerText="From" style="width:70px;" >
+                                             <h:outputText value="#{wd.fromTime}" />                                                                                     
+                                        </p:column>
+                                         <p:column headerText="To" style="width:70px;" >
+                                             <h:outputText value="#{wd.toTime}" />                                                                                     
+                                        </p:column>
+                                        <p:column headerText="Minutes" style="width:40px;" >
+                                            <h:outputText value="#{wd.minutes}" />                                                                                     
+                                        </p:column>
+                                        <p:column headerText="Status" style="width:75px;" >
+                                            <h:outputText value="#{wd.status}" />                                                                                     
+                                        </p:column>
+                                        <p:column headerText="Remark" style="width:125px;">
+                                            <h:outputText value="#{wd.remark}"/>                                                                                     
+                                        </p:column> 
+
+
+                                        <f:facet name="footer">
+                                            Total: #{wdoneCon.wdoneList.stream().map(wd->wd.minutes).sum()}
+                                        </f:facet>
+
+
+
+                                    </p:dataTable>
+                                </p:panelGrid>
+
+                            </h:panelGrid>                                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

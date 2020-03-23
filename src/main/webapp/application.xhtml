@@ -1,0 +1,90 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Application</ui:define>
+
+    <ui:define name="content">
+        <h:form id="crd1">
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card">
+                            
+                            <p:growl id="growl" showDetail="true" sticky="true" /> 
+                            
+                            <h1>Application</h1>
+                            <h:panelGrid cellpadding="10" width="100%">
+                                <p:panelGrid id="pn" columns="2" columnClasses="ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                               
+                                        <p:outputLabel value="Department"/>                         
+                                        <p:autoComplete id="dt" value="#{apptnDao.combodept}" completeMethod="#{autoComplete.filterDepartmentCombo}"
+                                                        var="dept" itemLabel="#{dept.deptnme}" itemValue="#{dept}" converter="deptConverter" 
+                                                        forceSelection="true" dropdown="true">
+
+                                            <p:column>
+                                                <h:outputText value="#{dept.deptnme}" />
+                                            </p:column>                                            
+                                            <p:ajax event="itemSelect" process="@this"  listener="#{apptnDao.selectDept}" update="dt ap"/>
+                                        </p:autoComplete>
+
+                                        <p:outputLabel value="Application ID"/>                         
+                                        <p:inputText value="#{apptnDao.apptn.appid}" style="max-width: 60px;" readonly="true" />
+
+                                        <p:outputLabel value="Application Name"/>                         
+                                        <p:inputText value="#{apptnDao.apptn.applton}" />                  
+                                         
+                                 </p:panelGrid>  
+                                
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-1.5,ui-grid-col-1.5,ui-grid-col-1.5" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    <p:commandButton id="New" value="New" action="#{apptnDao.newApcode()}" process="@form" update="pn" icon="fa fa-plus Fs14 White" style="max-width:100px;" />
+                                    <p:commandButton id="Save" value="Submit" action="#{apptnDao.insert()}" process="@form" update="@form growl" icon="fa fa-save Fs14 White" style="max-width:100px;" />
+                                    <p:button value="Exit" outcome="dashboard" icon="fa fa-close Fs14 White"  style="max-width:80px;"/>
+                                </p:panelGrid>
+                                
+                                
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    <p:dataTable id="ap" var="apList" value="#{apptnDao.apList}" reflow="true" selection="#" rowKey="#" paginator="true" rows="12">
+                                                <p:column headerText="Sno" >
+                                                    <h:outputText value="#{apList.sno}" />
+                                                </p:column>
+
+                                                <p:column headerText="Department" >
+                                                    <h:outputText value="#{apList.deptid}" />
+                                                </p:column>
+
+                                                <p:column headerText="Application ID" >
+                                                    <h:outputText value="#{apList.appid}" />
+                                                </p:column>
+
+                                                <p:column headerText="Application Name" >
+                                                    <h:outputText value="#{apList.applton}" />
+                                                </p:column>
+
+                                                
+                                            <p:column>                                                       
+                                                        
+                                                <p:commandButton id="select" icon="fa fa-edit Fs14 White" style="max-width:20px;height: 20px;" action="#{apptnDao.select()}" process="@this" update="@form">
+                                                       <f:setPropertyActionListener value="#{apList}" target="#{apptnDao.selectedApptn}" />
+                                                    </p:commandButton>
+
+                                                <p:commandButton id="Delete" icon="fa fa-trash Fs14 White" style="max-width:20px;height: 20px;"  action="#{apptnDao.delete()}" process="@this" update="@form">
+                                                        <f:setPropertyActionListener value="#{apList}" target="#{apptnDao.selectedApptn}" />
+                                                    </p:commandButton>
+                                                    </p:column>
+
+                                            </p:dataTable>
+                                        </p:panelGrid>
+                                    
+                              </h:panelGrid>                                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

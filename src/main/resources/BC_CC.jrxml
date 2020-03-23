@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BC_CC" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ed5c58e7-59ae-4f6c-9534-d264af5f499c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.export.docx.flexible.row.height" value="true"/>
+	<style name="colHdr" forecolor="#000000" vAlign="Middle" fontName="Helvetica" fontSize="8" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252"/>
+	<style name="hdr" forecolor="#FF99FF" hAlign="Center" vAlign="Middle" fontName="Helvetica" fontSize="12" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="subHdr" hAlign="Center" vAlign="Middle" fontName="Helvetica" fontSize="10" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="dtlLineText" hAlign="Left" vAlign="Middle" fontName="Helvetica" fontSize="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="grpHdr1" vAlign="Middle" fontName="Helvetica" fontSize="9" isBold="false" isStrikeThrough="false"/>
+	<style name="dtlLineNum" hAlign="Right" vAlign="Middle" pattern="#,##0.00;-#,##0.00" fontName="Helvetica" fontSize="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="grpFtrText1" hAlign="Left" vAlign="Middle" fontName="Helvetica" fontSize="9" isBold="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="grpFtrNum1" hAlign="Right" vAlign="Middle" pattern="#,##0.00;-#,##0.00" fontName="Helvetica" fontSize="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="dateddMMyyyy" hAlign="Right" vAlign="Middle" pattern="dd/MM/yyyy" fontName="Helvetica" fontSize="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="emph" mode="Transparent" forecolor="#0033FF" fontName="Helvetica" fontSize="14" isUnderline="false" isStrikeThrough="false"/>
+	<style name="lblRAlign" hAlign="Right" vAlign="Middle" fontName="Helvetica" fontSize="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<parameter name="BKID" class="java.lang.Integer"/>
+	<parameter name="BRID" class="java.lang.Integer"/>
+	<parameter name="D04" class="java.lang.String"/>
+	<parameter name="BC" class="java.lang.String"/>
+	<parameter name="BK" class="java.lang.String"/>
+	<parameter name="BR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[{call BC_CC($P{BKID},$P{BRID},$P{D04},$P{BC})}]]>
+	</queryString>
+	<field name="GroupNo" class="java.lang.Integer"/>
+	<field name="A70D" class="java.math.BigDecimal"/>
+	<field name="A70C" class="java.math.BigDecimal"/>
+	<field name="A71D" class="java.math.BigDecimal"/>
+	<field name="A71C" class="java.math.BigDecimal"/>
+	<field name="G01" class="java.lang.String"/>
+	<field name="HDNME" class="java.lang.String"/>
+	<variable name="TOTAL_DEBIT" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{A71D}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_CREDIT" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{A71C}]]></variableExpression>
+	</variable>
+	<variable name="GrandTotalDR" class="java.lang.Double" resetType="Group" resetGroup="Grp1" calculation="Sum">
+		<variableExpression><![CDATA[$V{TOTAL_DEBIT}]]></variableExpression>
+	</variable>
+	<variable name="GrandTotalCR" class="java.lang.Double" resetType="Group" resetGroup="Grp1" calculation="Sum">
+		<variableExpression><![CDATA[$V{TOTAL_CREDIT}]]></variableExpression>
+	</variable>
+	<variable name="grpNo" class="java.lang.Integer">
+		<variableExpression><![CDATA[$F{GroupNo}]]></variableExpression>
+	</variable>
+	<variable name="grpNo2" class="java.lang.Integer">
+		<variableExpression><![CDATA[($V{grpNo}.intValue() == 2 ? 1 : 0)]]></variableExpression>
+	</variable>
+	<group name="Grp1">
+		<groupExpression><![CDATA[$F{GroupNo}]]></groupExpression>
+		<groupHeader>
+			<band height="30">
+				<printWhenExpression><![CDATA[$F{GroupNo}.equals(null)]]></printWhenExpression>
+				<textField>
+					<reportElement style="grpHdr1" x="10" y="5" width="100" height="20" uuid="e3f868c0-4df9-4605-8307-3121fc75723f"/>
+					<textFieldExpression><![CDATA[$F{GroupNo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="grpHdr1" positionType="Float" isPrintRepeatedValues="false" x="10" y="5" width="100" height="20" isPrintInFirstWholeBand="true" printWhenGroupChanges="Grp1" uuid="aaadee8c-af4e-475f-a763-1fe5e09cc3f8">
+						<printWhenExpression><![CDATA[$F{GroupNo} == 2]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font fontName="SansSerif"/>
+					</textElement>
+					<text><![CDATA[Opening/Closing Balance]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="44">
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement style="grpFtrNum1" x="310" y="10" width="120" height="20" uuid="bc3c6645-ccbb-4001-97b2-8069ca5d7e27"/>
+					<textElement textAlignment="Right">
+						<font fontName="SansSerif"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TOTAL_DEBIT}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement style="grpFtrNum1" x="430" y="10" width="120" height="20" uuid="0ad42ad8-e2bb-4fc4-ab26-6925a46d2bb7"/>
+					<textElement textAlignment="Right">
+						<font fontName="SansSerif"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TOTAL_CREDIT}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="10" y="4" width="540" height="1" uuid="a41eb3e3-ee65-4d83-a4c3-0a60a3bc44f7"/>
+				</line>
+				<line>
+					<reportElement x="10" y="36" width="540" height="1" uuid="cdaed081-81d4-426f-b270-07bce9ddda30"/>
+				</line>
+				<staticText>
+					<reportElement style="grpFtrText1" x="70" y="10" width="240" height="20" uuid="51156d24-15af-4312-9bd0-0ca3f30995a8"/>
+					<textElement>
+						<font fontName="SansSerif"/>
+					</textElement>
+					<text><![CDATA[GRAND TOTAL]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="113" splitType="Stretch">
+			<staticText>
+				<reportElement style="colHdr" x="10" y="90" width="60" height="20" isPrintWhenDetailOverflows="true" uuid="f7360539-14ef-4bb6-a62f-44299d9026b6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[A/C Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="colHdr" x="70" y="90" width="240" height="20" uuid="f17f2430-9c37-4be1-9028-a2f39d5e4b3e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Account Head]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="colHdr" x="310" y="90" width="120" height="20" uuid="aae385ee-20e0-40b4-97fb-f79309ccebf0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DEBIT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="colHdr" x="430" y="90" width="120" height="20" uuid="7fa7f671-460d-4b6c-996f-b89177a71c25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CREBIT]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement style="dateddMMyyyy" x="10" y="55" width="281" height="20" isPrintWhenDetailOverflows="true" forecolor="#0033FF" uuid="5c7e132a-8805-4639-97e2-323ff96d6834">
+					<printWhenExpression><![CDATA[$P{BC}.equals("B")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="14" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Bank Cash as on " + $P{D04}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy">
+				<reportElement style="lblRAlign" x="430" y="55" width="120" height="20" uuid="6efc1fe6-1931-4e02-8793-ccdfa323c257"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Date : " + new SimpleDateFormat("dd/MM/yyyy")
+.format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="hdr" x="222" y="0" width="134" height="20" uuid="2604a512-a59d-4645-98fe-a3930ab7dcfb"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{BK}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="subHdr" isPrintRepeatedValues="false" x="222" y="25" width="134" height="20" uuid="a485f065-8246-4ce6-9f11-0eab356c5e9b"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{BR}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement style="dateddMMyyyy" x="10" y="55" width="281" height="20" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" forecolor="#0033FF" uuid="ca0d7584-615f-4eff-b189-9e41e15506cc">
+					<printWhenExpression><![CDATA[$P{BC}.equals("C")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="SansSerif" size="14" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Clear Cash as on " + $P{D04}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="dtlLineText" x="10" y="0" width="60" height="20" uuid="ff7ae0b5-c6c7-46e4-b99e-61223696f47d"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{G01}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="dtlLineText" x="70" y="0" width="240" height="20" uuid="d49ef9ab-f2a0-4263-88d4-c7721e88b20b"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{HDNME}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement style="dtlLineNum" x="310" y="0" width="120" height="20" uuid="64d26d12-77be-44f4-9ad1-eba7ab01e406"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{A71D}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement style="dtlLineNum" x="430" y="0" width="120" height="20" uuid="c03644b7-8600-41dc-88e3-6302f33b9290"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{A71C}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<summary>
+		<band height="33" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,153 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">To Do Header</ui:define>
+
+    <ui:define name="content">
+        <h:form id="crd1">
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card">
+                            
+                            <p:growl id="growl" showDetail="true" sticky="true" /> 
+                            
+                            <h1>To Do Header Entry</h1>
+                            <h:panelGrid cellpadding="10" width="100%">
+                                <p:panelGrid id="pn" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                               
+                                        <p:outputLabel value="MainTask ID"/>                         
+                                        <p:inputText style="max-width: 120px;" value="#{todohDao.mtid}"/>
+
+                                         <p:outputLabel value="Entry Date"/>                         
+                                         <p:calendar  showOn="button" value="#{todohDao.txtptoday}" navigator="true" pattern="MM/dd/yyyy"/>
+
+                                         <p:outputLabel value="Department Name"/>
+                                         <p:autoComplete id="dt" value="#{todohDao.combodept}" completeMethod="#{autoComplete.filterDepartmentCombo}"
+                                                        var="dept" itemLabel="#{dept.deptnme}" itemValue="#{dept}" converter="deptConverter" 
+                                                        forceSelection="true" dropdown="true">
+                                            <p:column>
+                                                <h:outputText value="#{dept.deptnme}" />
+                                            </p:column>
+                                            <p:ajax event="itemSelect" process="@this"  listener="#{todohDao.selectDept}" update="dt app"/>
+                                        </p:autoComplete>                                       
+                                         
+                                         <p:outputLabel value="Application"/>                                          
+                                         <p:autoComplete id="app" value="#{todohDao.comboapp}" completeMethod="#{autoComplete.filterAppCombo}"
+                                                         var="apptn" itemLabel="#{apptn.applton}" itemValue="#{apptn}" converter="appConverter" 
+                                                        forceSelection="true" dropdown="true">
+
+                                            <p:column>
+                                                <h:outputText value="#{apptn.applton}" />
+                                            </p:column>
+                                             <p:ajax event="itemSelect" process="@this" update="@this" listener="#{todohDao.selectApptn}" />
+                                        </p:autoComplete>
+                                         
+
+                                         <p:outputLabel value="Description"/>                         
+                                         <p:inputText value="#{todohDao.todoh.desp}"/>
+                                    
+                                         <p:outputLabel value="Estimated Minute"/>                         
+                                         <p:inputText value="#{todohDao.todoh.eminute}" style="max-width: 50px;"/>  
+
+                                         <p:outputLabel value="To Finish Date"/>                         
+                                         <p:calendar  showOn="button" value="#{todohDao.todoh.tfdate}" navigator="true" pattern="MM/dd/yyyy" />
+
+                                         <p:outputLabel value="Leader Name"/>                         
+                                         <p:autoComplete id="luser" value="#{todohDao.comboLUsr}" completeMethod="#{autoComplete.filterUserCombo}"
+                                                         var="usr" itemLabel="#{usr.unme}" itemValue="#{usr}" converter="usrConverter" 
+                                                forceSelection="true" dropdown="true"  >
+
+                                            <p:column>
+                                                <h:outputText value="#{usr.unme}" />
+                                            </p:column>
+                                             <p:ajax event="itemSelect" listener="#{todohDao.selectLUsr}" update="luser"/>
+                                        </p:autoComplete>
+
+                                         <p:outputLabel value="Assign By"/>                         
+                                         <p:autoComplete id="auser" value="#{todohDao.comboAUsr}" completeMethod="#{autoComplete.filterUserCombo}"
+                                                         var="usr" itemLabel="#{usr.unme}" itemValue="#{usr}" converter="usrConverter" 
+                                                forceSelection="true" dropdown="true"  >
+                                                <p:column>
+                                                    <h:outputText value="#{usr.unme}" />
+                                                </p:column>
+                                                 <p:ajax event="itemSelect" listener="#{todohDao.selectAUsr}" update="auser"/>
+                                            </p:autoComplete>                                         
+                                         <p:outputLabel value="Remark"/>                         
+                                         <p:inputTextarea value="#{todohDao.todoh.remark}"/>
+                                         
+                                 </p:panelGrid> 
+                                
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-1.5,ui-grid-col-1.5" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                        <p:commandButton id="new" value="New" action="#{todohDao.newTohcode()}" process="@form" update="pn" icon="fa fa-plus Fs14 White" style="max-width:80px;" />
+                                        <p:commandButton id="Add" value="Add" action="#{todohDao.insert()}"  process="@form" update="@form growl" icon="fa fa-save Fs14 White" style="max-width:80px;" />
+                                        <p:button value="Exit" outcome="dashboard" icon="fa fa-close Fs14 White"  style="max-width:80px;"/>
+                                </p:panelGrid>
+                                
+                                
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    
+                                    <p:dataTable id="todoh" var="todoh" value="#{todohDao.todohList}" reflow="true" selection="#" rowKey="#" paginator="true" rows="12">
+                                        <p:column headerText="Serial No" style="width:15px;" >
+                                            <h:outputText value="#{todoh.sno}" />
+                                        </p:column>
+                                         <p:column headerText="Entry Date"  >
+                                             <h:outputText value="#{todoh.edate}" />
+                                        </p:column>
+                                        <p:column headerText="Department" style="width:50px;" >
+                                            <h:outputText value="#{todoh.deptnme}" />
+                                        </p:column>
+                                         <p:column headerText="Application"  >
+                                             <h:outputText value="#{todoh.applton}" />
+                                        </p:column>
+                                                                                                                    
+                                        <p:column headerText="Description" style="width:200px;" >
+                                            <h:outputText value="#{todoh.desp}" />
+                                        </p:column>
+
+                                        
+                                        <p:column headerText="To Finish Date"  >
+                                            <h:outputText value="#{todoh.tfdate}" />
+                                        </p:column>
+                                                                                                                   
+                                         <p:column headerText="Company Department"  >
+                                            
+                                        </p:column>
+
+                                        <p:column headerText="Leader"  >
+                                            <h:outputText value="#{todoh.lunme}" />
+                                        </p:column>
+
+                                        <p:column headerText="Assign By"  >
+                                            <h:outputText value="#{todoh.aunme}" />
+                                        </p:column>
+
+                                       
+
+                                        <p:column style="width:30px;">
+                                            <p:commandButton id="select" icon="fa fa-edit Fs14 White" style="max-width:20px;max-height: 20px;" action="#{todohDao.select()}" process="@this" update="@form">
+                                               <f:setPropertyActionListener value="#{todoh}" target="#{todohDao.selectedTH}" />
+                                            </p:commandButton>
+
+                                            <p:commandButton id="Delete" icon="fa fa-trash Fs14 White" style="max-width:20px;max-height: 20px;" action="#{todohDao.delete()}" process="@this" update="@form">
+                                                <f:setPropertyActionListener value="#{todoh}" target="#{todohDao.selectedTH}" />
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:panelGrid>
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-1.5,ui-grid-col-1.5" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                                                 
+                                </p:panelGrid>
+                              </h:panelGrid>                                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

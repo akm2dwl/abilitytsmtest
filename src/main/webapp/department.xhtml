@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Department</ui:define>
+
+    <ui:define name="content">
+        <h:form id="crd1">
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card">
+                            
+                            <p:growl id="growl" showDetail="true" sticky="true" /> 
+                            
+                            <h1>Department</h1>
+                            <h:panelGrid cellpadding="10" width="100%">
+                                <p:panelGrid id="pn" columns="2" columnClasses="ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                               
+                                        <p:outputLabel value="Company Name"/>            
+                                        <p:inputText value="#{deptDao.dept.cmpy}"/>
+
+                                         <p:outputLabel value="Company Department"/>                         
+                                         <p:inputText value="#{deptDao.dept.cmpdept}"/>
+
+                                         <p:outputLabel value="Department Code"/>                         
+                                         <p:inputText value="#{deptDao.dept.deptid}" id="dtcode" style="max-width: 80px;" readonly="true"/>
+
+                                         <p:outputLabel value="Department Name"/>                         
+                                         <p:inputText value="#{deptDao.dept.deptnme}"/>                      
+                                         
+                                 </p:panelGrid>  
+                                  
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-1.5,ui-grid-col-1.5,ui-grid-col-1.5" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    <p:commandButton id="New" value="New" action="#{deptDao.newDeptId()}" process="@form" update="pn" icon="fa fa-plus Fs14 White" style="max-width:100px;" />
+                                    <p:commandButton id="Save" value="Submit" action="#{deptDao.insert()}" process="@form" update="@form growl" icon="fa fa-save Fs14 White" style="max-width:100px;" />
+                                    <p:button value="Exit" outcome="dashboard" icon="fa fa-close Fs14 White"  style="max-width:80px;"/>
+                                </p:panelGrid>
+                                
+                                
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
+                                    <p:dataTable id="dept" var="deptList" value="#{deptDao.deptList}" reflow="true" selection="#" rowKey="#" paginator="true" rows="12">
+                                                <p:column headerText="SNo" style="width:30px;" >
+                                                    <h:outputText value="#{deptList.sno}" />
+                                                </p:column>
+
+                                                <p:column headerText="Company Name" style="width:200px;" >
+                                                    <h:outputText value="#{deptList.cmpy}" />
+                                                </p:column>
+
+                                                <p:column headerText="Company Department" style="width:200px;" >
+                                                    <h:outputText value="#{deptList.cmpdept}" />
+                                                </p:column>
+
+                                                <p:column headerText="Department ID" style="width:70px;" >
+                                                    <h:outputText value="#{deptList.deptid}" />
+                                                </p:column>
+
+                                                <p:column headerText="Department Name" style="width:300px;" >
+                                                    <h:outputText value="#{deptList.deptnme}" />
+                                                </p:column>
+
+                                                
+                                            <p:column>                                                       
+                                                        
+                                                <p:commandButton id="select" icon="fa fa-edit Fs14 White" style="max-width:20px;height: 20px;" action="#{deptDao.select()}" process="@this" update="@form">
+                                                    <f:setPropertyActionListener value="#{deptList}" target="#{deptDao.selecteddp}" />
+                                                </p:commandButton>
+
+                                                <p:commandButton id="Delete" icon="fa fa-trash Fs14 White" style="max-width:20px;height: 20px;"  action="#{deptDao.delete()}" process="@this" update="@form">
+                                                    <f:setPropertyActionListener value="#{deptList}" target="#{deptDao.selecteddp}" />
+                                                </p:commandButton>
+                                            </p:column>
+
+                                    </p:dataTable>
+                                </p:panelGrid>
+                                    
+                              </h:panelGrid>                                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
